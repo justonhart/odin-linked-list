@@ -6,14 +6,23 @@ export default class LinkedList {
 	 * Adds a new node containing {value} to the end of the list
 	 */
 	append(value: any): void {
-
+		const newNode = new Node();
+		newNode.value = value;
+		if(this.firstNode === null){
+			this.firstNode = newNode;
+		} else {
+			this.tail().nextNode = newNode;
+		}
 	}
 
 	/**
 	 * Adds a new node containing {value} to the start of the list
 	 */
 	prepend(value: any): void {
-
+		const newNode = new Node();
+		newNode.value = value;
+		newNode.nextNode = this.head();
+		this.firstNode = newNode;
 	}
 
 	/**
@@ -22,11 +31,8 @@ export default class LinkedList {
 	size(): number {
 		let lastNode = this.firstNode;
 		let count = 0;
-		if(lastNode === null) {
-			return count;
-		}
 
-		while(lastNode.nextNode !== null) {
+		while(lastNode !== null) {
 			lastNode = lastNode.nextNode;
 			count++;
 		}
@@ -37,15 +43,16 @@ export default class LinkedList {
 	/**
 	 * Returns the first node in the list
 	 */
-	head(): Node {
+	head(): Node | null {
 		return this.firstNode;
 	}
 
 	/**
 	 * Returns the last node in the list
 	 */
-	tail() {
+	tail(): Node | null {
 		let lastNode = this.firstNode;
+
 		if(lastNode === null) {
 			return null;
 		}
@@ -60,8 +67,17 @@ export default class LinkedList {
 	/**
 	 * Returns the node at the given index
 	 */
-	at(index: number): Node {
-
+	at(index: number): Node | null {
+		let currentIndex = 0;
+		let currentNode = this.firstNode;
+		while(currentIndex < index){
+			if(currentNode === null){
+				return null;
+			}
+			currentNode = currentNode.nextNode;
+			currentIndex++;
+		}
+		return currentNode;
 	}
 
 	/**
@@ -73,7 +89,7 @@ export default class LinkedList {
 		}
 
 		if(this.firstNode.nextNode === null){
-			delete this.firstNode;
+			this.firstNode = null;
 			return;
 		}
 
@@ -82,7 +98,7 @@ export default class LinkedList {
 			penultimateNode = penultimateNode.nextNode;
 		}
 
-		delete penultimateNode.nextNode;
+		penultimateNode.nextNode = null;
 	}
 
 	/**
@@ -94,6 +110,7 @@ export default class LinkedList {
 			if(currentNode.value === value) {
 				return true;
 			}
+			currentNode = currentNode.nextNode;
 		}
 		return false;
 	}
@@ -109,6 +126,7 @@ export default class LinkedList {
 				return currentIndex;
 			}
 			currentIndex++;
+			currentNode = currentNode.nextNode;
 		}
 		return null;
 	}
@@ -117,20 +135,12 @@ export default class LinkedList {
 	 * Returns a string representation of the linked list
 	 */
 	toString(): string {
-
-	}
-
-	/** 
-	 * Inserts a new node with the given value at the given index
-	 */
-	insertAt(value: any, index: number): void {
-
-	}
-
-	/**
-	 * Removes the node at the given index
-	 */
-	removeAt(index: number): void {
-
+		let currentNode = this.firstNode;
+		let returnVal: string = '';
+		while(currentNode != null) {
+			returnVal += `[${currentNode.value}] -> `;
+			currentNode = currentNode.nextNode;
+		}
+		return returnVal + 'null';
 	}
 }
